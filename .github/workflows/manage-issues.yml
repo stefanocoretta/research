@@ -23,7 +23,7 @@ jobs:
           contains(github.event.issue.title, 'Meeting')
         with:
           project: 'Meetings'
-          column: Assigned
+          column: Next
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
   set-task-project:
     name: Set project of Task issues to Task board Triage
