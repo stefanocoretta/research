@@ -1,11 +1,12 @@
-name: Move assigned issues to "Task board Assigned"
+name: Move assigned issues to Task board Assigned
 
 on:
-  pull_request:
+  issues:
     types: [assigned]
 
 jobs:
   automate-project-columns:
+    name: Move to Assigned
     runs-on: ubuntu-latest
     steps:
       - uses: alex-page/github-project-automation-plus@v0.3.0
