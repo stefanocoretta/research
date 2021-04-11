@@ -1,4 +1,4 @@
-name: Move assigned issues to "Task board: Assigned"
+name: Move assigned issues to "Task board Assigned"
 
 on:
   pull_request:
