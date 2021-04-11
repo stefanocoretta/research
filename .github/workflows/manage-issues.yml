@@ -1,0 +1,39 @@
+name: Manage issues
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  set-meeting-label:
+    name: Set label of Meeting issues to meetings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Naturalclar/issue-action@v2.0.2
+        with:
+          title-or-body: "title"
+          parameters: '[ {"keywords": ["Meeting"], "labels": ["meetings"]}]'
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+  set-meeting-project:
+    name: Set project of Meeting issues to Meetings
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.3.0
+        if: |
+          contains(github.event.issue.title, 'Meeting')
+        with:
+          project: 'Meetings'
+          column: Assigned
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+  set-task-project:
+    name: Set project of Task issues to Task board Triage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.3.0
+        if: |
+          contains(github.event.issue.labels.*.name, 'todo') ||
+          contains(github.event.issue.labels.*.name, 'discussion')
+        with:
+          project: 'Task board'
+          column: Triage
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
