@@ -2,7 +2,7 @@ name: Manage issues
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened, labeled, assigned]
 
 jobs:
   set-meeting-label:
@@ -10,30 +10,54 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: Naturalclar/issue-action@v2.0.2
+        if: github.event.action == 'opened'
         with:
           title-or-body: "title"
           parameters: '[ {"keywords": ["Meeting"], "labels": ["meetings"]}]'
           github-token: "${{ secrets.GITHUB_TOKEN }}"
+
   set-meeting-project:
     name: Set project of Meeting issues to Meetings
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.3.0
+      - uses: srggrs/assign-one-project-github-action@1.2.0
         if: |
+          github.event.action == 'opened' &&
           contains(github.event.issue.title, 'Meeting')
         with:
-          project: 'Meetings'
-          column: Next
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          # CHANGE PROJECT URL
+          project: 'https://github.com/stefanocoretta/research/projects/1'
+          column_name: 'Next'
+
   set-task-project:
     name: Set project of Task issues to Task board Triage
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: alex-page/github-project-automation-plus@v0.3.0
+      - uses: srggrs/assign-one-project-github-action@1.2.0
         if: |
-          contains(github.event.issue.labels.*.name, 'todo') ||
-          contains(github.event.issue.labels.*.name, 'discussion')
+          github.event.action == 'labeled' &&
+          (
+            contains(github.event.issue.labels.*.name, 'todo') ||
+            contains(github.event.issue.labels.*.name, 'discussion')
+          )
         with:
-          project: 'Task board'
-          column: Triage
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          # CHANGE PROJECT URL
+          project: 'https://github.com/stefanocoretta/research/projects/2'
+          column_name: 'Triage'
+
+  set-assigened-tasks:
+    name: Set assigned issues to Task board Assigned
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: srggrs/assign-one-project-github-action@1.2.0
+        if: github.event.action == 'assigned'
+        with:
+          # CHANGE PROJECT URL
+          project: 'https://github.com/stefanocoretta/research/projects/2'
+          column_name: 'Assigned'
