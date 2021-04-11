@@ -1,3 +1,7 @@
+# For the set-assigned-tasks job, you need to enable running actions
+# from forks if your repo is private or a fork.
+# See https://github.com/alex-page/github-project-automation-plus#personal-access-token-secretsgithub_token
+
 name: Manage issues
 
 on:
@@ -49,15 +53,13 @@ jobs:
           project: 'https://github.com/stefanocoretta/research/projects/2'
           column_name: 'Triage'
 
-  set-assigened-tasks:
+  set-assigned-tasks:
     name: Set assigned issues to Task board Assigned
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
     steps:
-      - uses: srggrs/assign-one-project-github-action@1.2.0
+      - uses: alex-page/github-project-automation-plus@v0.3.0
         if: github.event.action == 'assigned'
         with:
-          # CHANGE PROJECT URL
-          project: 'https://github.com/stefanocoretta/research/projects/2'
-          column_name: 'Assigned'
+          project: Task board
+          column: Assigned
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
