@@ -1,11 +1,11 @@
-name: Set todo's and discussions to "Task board"
+name: Move task issues to Task board
 on:
   issues:
     types: [labeled]
 
 jobs:
   assign-project:
-    name: Set project to Task board
+    name: Set task project to Task board
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     runs-on: ubuntu-latest
@@ -15,5 +15,5 @@ jobs:
           contains(github.event.issue.labels.*.name, 'todo') ||
           contains(github.event.issue.labels.*.name, 'discussion')
         with:
-          project: 'https://github.com/stefanocoretta/gallo-italian-vitality/projects/1'
+          project: 'https://github.com/stefanocoretta/ling-systems/projects/2'
           column_name: 'Triage'
