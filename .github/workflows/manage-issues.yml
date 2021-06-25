@@ -13,7 +13,7 @@ jobs:
         if: github.event.action == 'opened'
         with:
           title-or-body: "title"
-          parameters: '[ {"keywords": ["Meeting"], "labels": ["meetings"]}]'
+          parameters: '[ {"keywords": ["Meeting"], "labels": ["meeting"]}]'
           github-token: "${{ secrets.GITHUB_TOKEN }}"
 
   set-meeting-project:
